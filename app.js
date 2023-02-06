@@ -100,7 +100,7 @@ app.action("open_modal_button", async ({ ack, body, context }) => {
                 type: "static_select",
                 placeholder: {
                   type: "plain_text",
-                  text: "Select a conversation",
+                  text: "Select a ticket label",
                   emoji: true,
                 },
                 action_id: "label",
@@ -110,7 +110,7 @@ app.action("open_modal_button", async ({ ack, body, context }) => {
                 type: "static_select",
                 placeholder: {
                   type: "plain_text",
-                  text: "Select a channel",
+                  text: "Select an issue type",
                   emoji: true,
                 },
                 action_id: "issueType",
