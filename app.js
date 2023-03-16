@@ -38,7 +38,6 @@ const openai = new OpenAIApi(
 app.event("message", async ({ event, context }) => {
   if (!event.thread_ts || !event.text.includes(`<@${context.botUserId}>`))
     return;
-  console.log(event.thread_ts);
   const slackMessagesString = await getMessagesFromThread(app, event, context);
 
   provisionalTicket = await getGPTSummary(slackMessagesString, openai);

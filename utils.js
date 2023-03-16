@@ -107,21 +107,23 @@ const getJiraTicketBody = (title, description, label, issueType) => {
       issuetype: { name: issueType },
       summary: title,
       description: description,
-      labels: [label]
+      labels: [label],
     },
   };
 };
 
 const postTicket = async (ticketTitle, ticketDescription, label, issueType) => {
-  const body = getJiraTicketBody(ticketTitle, ticketDescription, label, issueType);
+  const body = getJiraTicketBody(
+    ticketTitle,
+    ticketDescription,
+    label,
+    issueType
+  );
   try {
-    const response = await authFetch(
-      "https://harryjira.atlassian.net/rest/api/2/issue",
-      {
-        body: JSON.stringify(body),
-        method: "POST",
-      }
-    );
+    const response = await authFetch(`${JIRA_PROJECT_URL}/rest/api/2/issue`, {
+      body: JSON.stringify(body),
+      method: "POST",
+    });
 
     const res = await response.json();
     console.log(res.errors);
