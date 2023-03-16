@@ -2,12 +2,13 @@
 const { Configuration, OpenAIApi } = require("openai");
 const {
   getMessagesFromThread,
-  getGPTSummary,
+  getGPTTicket,
   getProjectIssueTypes,
   getProjectLabels,
   postTicket,
   constructLabelOptionArray,
   constructIssueTypeIdsArray,
+  getThreadSummary,
 } = require("./utils");
 require("dotenv").config();
 
@@ -40,7 +41,18 @@ app.event("message", async ({ event, context }) => {
     return;
   const slackMessagesString = await getMessagesFromThread(app, event, context);
 
-  provisionalTicket = await getGPTSummary(slackMessagesString, openai);
+  // In case we just want a summary
+  if (event.text.includes("sum")) {
+    const threadSummary = await getThreadSummary(slackMessagesString, openai);
+    await app.client.chat.postMessage({
+      token: context.botToken,
+      channel: event.channel,
+      thread_ts: event.thread_ts,
+      text: threadSummary,
+    });
+    return;
+  }
+  provisionalTicket = await getGPTTicket(slackMessagesString, openai);
 
   await app.client.chat.postMessage({
     token: context.botToken,

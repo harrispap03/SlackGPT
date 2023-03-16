@@ -1,4 +1,4 @@
-const getGPTSummary = async (conversation, openai) => {
+const getGPTTicket = async (conversation, openai) => {
   const basePrompt =
     'The following is a discussion between 2 people at a company. Create a Jira ticket with a "Title" and a "Description" section relative to what they are talking about:\n';
   try {
@@ -22,6 +22,30 @@ const getGPTSummary = async (conversation, openai) => {
     const title = completionText.match(titleRegex)[1];
     const description = completionText.match(descriptionRegex)[1];
     return { title, description };
+  } catch (error) {
+    // or error.response for gpt api failures
+    console.log("ERRROR", error);
+  }
+};
+
+const getThreadSummary = async (conversation, openai) => {
+  const basePrompt =
+    'Summarize the following discussion: \n';
+  try {
+    const fullPrompt = basePrompt + conversation;
+
+    const completionResponse = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: fullPrompt,
+      temperature: 0.7,
+      max_tokens: 256,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0,
+    });
+
+    const completionText = completionResponse.data.choices[0].text;
+    return completionText
   } catch (error) {
     // or error.response for gpt api failures
     console.log("ERRROR", error);
@@ -147,11 +171,12 @@ const constructIssueTypeIdsArray = (issueTypeIds) => {
 };
 
 module.exports = {
-  getGPTSummary,
+  getGPTTicket,
   getMessagesFromThread,
   getProjectLabels,
   getProjectIssueTypes,
   postTicket,
   constructLabelOptionArray,
   constructIssueTypeIdsArray,
+  getThreadSummary,
 };
