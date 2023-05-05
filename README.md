@@ -1,6 +1,8 @@
 # SlackGPT
 Hacky nodeJS app that allows users to create summarisations of slack threads and Jira tickets out of them 
 
+[Demo video](https://youtu.be/APFjWjmruB0)
+
 Tools used:
 
 - [Slack Bolt API](https://slack.dev/bolt-js/concepts)
